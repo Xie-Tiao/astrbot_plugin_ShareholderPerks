@@ -1,6 +1,9 @@
 from astrbot.api.event import filter, AstrMessageEvent, MessageEventResult
 from astrbot.api.star import Context, Star, register
 from astrbot.api import logger # 使用 astrbot 提供的 logger 接口
+import sys
+from pathlib import Path
+sys.path.append(str(Path(__file__).parent))
 from announcement_extractor import run_latest_announcement_extraction
 
 @register("helloworld", "author", "一个简单的 Hello World 插件", "1.0.0", "repo url")
