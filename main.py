@@ -6,15 +6,18 @@ from astrbot.api import logger, AstrBotConfig
 from astrbot.core.message.message_event_result import MessageChain
 import json
 import requests
+import httpx
 
-def extract_latest_announcement_from_url(json_url, return_format="full"):
+async def extract_latest_announcement_from_url(json_url, return_format="full"):
     """核心提取函数（内部使用，无需外部传参）"""
     # 1. 发送请求获取 JSON 数据
     try:
-        response = requests.get(json_url, timeout=10)
-        response.raise_for_status()
-        json_data = response.json()
-    except requests.exceptions.RequestException as e:
+        # 使用异步客户端
+        async with httpx.AsyncClient() as client:
+            response = await client.get(json_url, timeout=10)
+            response.raise_for_status()
+            json_data = response.json()
+    except httpx.RequestError as e: # 替换 requests.exceptions.RequestException
         raise ConnectionError(f"获取 JSON 数据失败：{e}")
     except json.JSONDecodeError:
         raise ValueError("获取的内容不是有效的 JSON 格式")
@@ -79,7 +82,7 @@ class XTSheepPlugin(Star):
         '''主动获取股东回馈公告的指令''' 
         logger.info("触发sheep指令!")
         DEFAULT_JSON_URL = self.json_url
-        sheep_msg = extract_latest_announcement_from_url(DEFAULT_JSON_URL)
+        sheep_msg = await extract_latest_announcement_from_url(DEFAULT_JSON_URL)
         if sheep_msg:
             yield event.plain_result(sheep_msg)
     
@@ -116,7 +119,7 @@ class XTSheepPlugin(Star):
 
         try:
             # 先获取最新公告时间并校验是否为今天
-            sheep_time = extract_latest_announcement_from_url(self.json_url, return_format="only_time")
+            sheep_time = await extract_latest_announcement_from_url(self.json_url, return_format="only_time")
             today = datetime.datetime.now().strftime("%Y-%m-%d")
             
             if sheep_time != today:
@@ -124,7 +127,7 @@ class XTSheepPlugin(Star):
                 return
 
             # 校验通过，获取完整消息并推送
-            sheep_msg = extract_latest_announcement_from_url(self.json_url)
+            sheep_msg = await extract_latest_announcement_from_url(self.json_url)
             # 遍历所有群组发送
             for group in self.groups:
                 await self.context.send_message(group, MessageChain().message(sheep_msg))
