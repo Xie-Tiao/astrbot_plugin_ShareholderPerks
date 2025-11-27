@@ -72,8 +72,17 @@ def run_latest_announcement_extraction():
         for key, value in latest_announcement.items():
             print(f"{key}：{value}")
         print("=" * 80)
+
+        # 关键修改：将公告信息拼接成字符串返回
+        announcement_str = "\n".join([f"{key}：{value}" for key, value in latest_announcement.items()])
+        # 可选：添加标题和分割线，让回复更美观
+        return f"最新公告信息提取成功：\n{announcement_str}\n"
+    
     except Exception as e:
-        print(f"\033[91m提取失败：{e}\033[0m")
+        error_msg = f"提取失败：{e}"
+        print(f"\033[91m{error_msg}\033[0m")
+        # 失败时也返回错误信息，让插件能显示
+        return error_msg
 
 # 保留模块独立运行的能力（可选，不影响 main.py 调用）
 if __name__ == "__main__":
