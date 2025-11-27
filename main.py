@@ -5,7 +5,7 @@ import json
 import requests
 from datetime import datetime
 
-def extract_latest_announcement_from_url(json_url):
+def extract_latest_announcement_from_url(json_url, return_format="full"):
     """核心提取函数（内部使用，无需外部传参）"""
     # 1. 发送请求获取 JSON 数据
     try:
@@ -49,11 +49,16 @@ def extract_latest_announcement_from_url(json_url):
         f"&announcementTime={announcement_time}"
     )
 
+    # 5. 根据返回格式返回结果
+    if return_format == "only_time":
+        return announcement_time  # 仅返回时间字符串
+
     # 整理结果
     return (f"最新股东回馈消息：\n"
+            f"公告时间：{announcement_time}\n"
             f"股票代码：{latest_ann['secCode']}\n"
             f"公告标题：{clean_title}\n"
-            f"公告链接：{pdf_url}")
+            f"公告链接(在PC端打开)：{pdf_url}")
 
 @register("astrbot_plugin_ShareholderPerks", "XieTiao", "一个简单的自动提醒股东薅羊毛插件", "1.0.0", "https://github.com/Xie-Tiao/astrbot_plugin_ShareholderPerks")
 class XTSheepPlugin(Star):
@@ -66,6 +71,8 @@ class XTSheepPlugin(Star):
         '''主动获取股东回馈公告的指令''' 
         logger.info("触发sheep指令!")
         DEFAULT_JSON_URL = "https://www.cninfo.com.cn/new/fulltextSearch/full?searchkey=%E8%82%A1%E4%B8%9C%E5%9B%9E%E9%A6%88&sdate=&edate=&isfulltext=false&sortName=pubdate&sortType=desc&pageNum=1&pageSize=20&type="
+        sheep_time = extract_latest_announcement_from_url(DEFAULT_JSON_URL, return_format="only_time")
+        logger.info(f"获取到的最新股东回馈公告时间为: {sheep_time}")
         sheep_msg = extract_latest_announcement_from_url(DEFAULT_JSON_URL)
         if sheep_msg:
             yield event.plain_result(sheep_msg)
