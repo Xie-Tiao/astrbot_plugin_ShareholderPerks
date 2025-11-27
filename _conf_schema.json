@@ -1,0 +1,19 @@
+{
+  "groups": {
+    "description": "接收推送的群组唯一标识符列表",
+    "type": "list",
+    "hint": "填写群组唯一标识符，格式如：机器人类型:GroupMessage:群号",
+    "default": []
+  },
+  "push_time": {
+    "description": "每日推送时间（服务器时区）",
+    "type": "string",
+    "hint": "格式为 HH:MM，例如 09:30",
+    "default": "08:00"
+  },
+  "json_url": {
+    "description": "公告数据源JSON地址",
+    "type": "string",
+    "default": "https://www.cninfo.com.cn/new/fulltextSearch/full?searchkey=%E8%82%A1%E4%B8%9C%E5%9B%9E%E9%A6%88&sdate=&edate=&isfulltext=false&sortName=pubdate&sortType=desc&pageNum=1&pageSize=20&type="
+  }
+}
