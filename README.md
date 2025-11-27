@@ -19,7 +19,7 @@
    ```bash
    git clone https://github.com/Xie-Tiao/astrbot_plugin_ShareholderPerks.git
    ```
-2. 进入AstrBot网页插件配置界面，调整相关配置，并保存。
+2. 进入AstrBot webUI插件配置界面，调整相关配置，并保存。
 
 只支持AstrBot4.0及以上版本
 
@@ -46,6 +46,7 @@
 | OtherMessage | 其他消息 |
 
 前缀为`机器人类型`，中缀为`GroupMessage`，后缀为`QQ群号或QQ号`
+可以通过`/sid`查询
 最终组合结果类似：
 ```text
 aiocqhttp:GroupMessage:QQ群号

@@ -68,7 +68,7 @@ class XTSheepPlugin(Star):
         super().__init__(context)
         self.config = config
         self.groups = getattr(self.config, "groups", []) # 接收推送的群组列表
-        self.push_time = getattr(self.config, "push_time", "08:00") # 定时推送时间
+        self.push_time = getattr(self.config, "push_time", "09:30") # 定时推送时间
         self.json_url = getattr(self.config, "json_url", "https://www.cninfo.com.cn/new/fulltextSearch/full?searchkey=%E8%82%A1%E4%B8%9C%E5%9B%9E%E9%A6%88&sdate=&edate=&isfulltext=false&sortName=pubdate&sortType=desc&pageNum=1&pageSize=20&type=")  # 推送数据源 JSON 地址
         # 创建定时任务
         self._scheduler_task = asyncio.create_task(self._daily_scheduler())

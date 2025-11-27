@@ -2,14 +2,14 @@
   "groups": {
     "description": "接收推送的群组唯一标识符列表",
     "type": "list",
-    "hint": "填写群组唯一标识符，格式如：机器人类型:GroupMessage:群号",
+    "hint": "填写群组唯一标识符/sid，格式如：机器人类型:GroupMessage:群号",
     "default": []
   },
   "push_time": {
     "description": "每日推送时间（服务器时区）",
     "type": "string",
     "hint": "格式为 HH:MM，例如 09:30",
-    "default": "08:00"
+    "default": "09:30"
   },
   "json_url": {
     "description": "公告数据源JSON地址",
